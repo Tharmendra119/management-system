@@ -1,12 +1,17 @@
 const express = require("express");
 const router = express.Router();
 
+// 🔐 Load from environment variables
+const ADMIN_USER = process.env.ADMIN_USER;
+const ADMIN_PASS = process.env.ADMIN_PASS;
+
 router.post("/login", (req, res) => {
   const { username, password } = req.body;
 
-  console.log("LOGIN HIT:", username, password);
+  console.log("LOGIN HIT:", username);
 
-  if (username === "admin" && password === "admin123") {
+  // ✅ Compare with env values (NOT hardcoded)
+  if (username === ADMIN_USER && password === ADMIN_PASS) {
     return res.json({ token: "abc123" });
   }
 

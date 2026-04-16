@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const jwt = require("jsonwebtoken");
 
 // 🔐 Load from environment variables
 const ADMIN_USER = process.env.ADMIN_USER;

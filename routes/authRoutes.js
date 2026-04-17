@@ -11,9 +11,17 @@ router.post("/login", (req, res) => {
 
   console.log("LOGIN HIT:", username);
 
-  // ✅ Compare with env values (NOT hardcoded)
+  // ✅ Check credentials
   if (username === ADMIN_USER && password === ADMIN_PASS) {
-    return res.json({ token: "abc123" });
+    
+    // ✅ Generate REAL JWT token
+    const token = jwt.sign(
+      { username },                // payload
+      process.env.JWT_SECRET,      // secret key
+      { expiresIn: "1h" }          // expiry
+    );
+
+    return res.json({ token });
   }
 
   return res.status(401).json({ message: "Invalid credentials" });

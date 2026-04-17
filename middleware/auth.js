@@ -1,16 +1,23 @@
 const jwt = require("jsonwebtoken");
 
 const verifyToken = (req, res, next) => {
-  const token = req.headers.authorization;
+  const authHeader = req.headers.authorization;
 
-  if (!token) {
+  // Step 1: check header exists
+  if (!authHeader) {
     return res.status(401).json({ message: "No token provided" });
   }
 
+  // Step 2: extract token (remove "Bearer ")
+  const token = authHeader.startsWith("Bearer ")
+    ? authHeader.split(" ")[1]
+    : authHeader;
+
   try {
+    // Step 3: verify JWT
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    req.user = decoded; // contains { id: worker_id }
+    req.user = decoded;
 
     next();
   } catch (err) {
